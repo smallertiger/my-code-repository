@@ -91,8 +91,9 @@ public class GetAndPost {
         // 2. 打开到远程服务器的连接
         HttpURLConnection postConnection = (HttpURLConnection) obj.openConnection();
 
-        // 3. 设置一些属性，比如设置请求方法和请求参数
+        // 3. 设置一些属性，比如设置请求方法
         postConnection.setRequestMethod("POST");
+        // 设置请求头等
         postConnection.setRequestProperty("userId", "a1bcdefgh");
 
         // 因为提交的是 JSON 数据，所以需要设置请求类型
@@ -105,6 +106,7 @@ public class GetAndPost {
         OutputStream os = postConnection.getOutputStream();
 
         // 6. 写入输出数据，刷新缓存，关闭输出流
+        //param请求参数应该是 name1=value1&name2=value2
         os.write(POST_PARAMS.getBytes());
         os.flush();
         os.close();
@@ -117,7 +119,7 @@ public class GetAndPost {
         // 8. 判断请求状态响应码，如果为 201 则表示成功创建，因为服务器返回 201 ,其实返回 200 也是可以的
         if (responseCode == HttpURLConnection.HTTP_CREATED) { //success
             BufferedReader in = new BufferedReader(new InputStreamReader(
-                    postConnection.getInputStream()));
+                    postConnection.getInputStream(), "UTF-8"));
             String inputLine;
             StringBuffer response = new StringBuffer();
 
